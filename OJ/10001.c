@@ -2,8 +2,7 @@
 
 #include <stdio.h>
 
-int main()
-{
-    printf("I am from Taiwan.");
-    return 0;
+int main() {
+  printf("I am from Taiwan.");
+  return 0;
 }
