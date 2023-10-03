@@ -1,4 +1,4 @@
-// 欸這東西有沒有過期阿
+// 欸這東西有沒有過期阿（不良解法）
 
 #include <stdio.h>
 #include <string.h>
