@@ -1,7 +1,7 @@
 // 欸這東西有沒有過期阿
 
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 
 int main() {
   int year, month, day;
