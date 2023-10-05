@@ -53,7 +53,7 @@ int main() {
             mx = MAX(mx, counter);
           } else if (y > (x + d)) {
             break;
-          } else {
+          } else { // y < x - d
             // continue
           }
         }
