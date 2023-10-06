@@ -7,135 +7,122 @@
 #define MAX(i, j) (i > j ? i : j)
 
 int main() {
-  bool debug_mode = true;
-  int counter = 0;
-  int n, d, mx = 0;
-  int x = 0, y = 0;
+  bool debug_mode = false;
+  int n, d;
   scanf("%d %d\n", &n, &d);
-  int hill[n + 1];
+  int input[n + 1];
   for (int i = 1; i <= n; i++) {
-    scanf("%d", &hill[i]);
+    scanf("%d", &input[i]);
   }
 
+  int size = 0;
+  int counter = 0;
+  int j = 0;
+  int x = 0, y = 0;
+  int mx = 0;
+
   if (debug_mode) {
-    printf("歡迎使用 debug mode\n");
-    printf("此次測驗的 n:%d, d:%d\n", n, d);
-    printf("hill[1]~hill[n]:\n\t");
+    printf("歡迎使用 debug_mode，將會印出運作過程！\n");
+    printf("目前的參數：\n\tn=%d, d=%d, size=%d, counter=%d, j=%d, x=%d, y=%d, "
+           "mx=%d\n",
+           n, d, size, counter, j, x, y, mx);
+    printf("input[] 的內容：\n\t");
     for (int i = 1; i <= n; i++) {
-      printf("%d, ", hill[i]);
+      printf("%d, ", input[i]);
     }
     printf("\n");
   }
 
-  for (int flag = 1; flag <= n; flag++) {
-    counter = 0;
-    x = 0;
-    y = 0;
+  for (int flag = 1; flag <= n; flag++) { // 原始陣列的第 flag 個當頭
+    // 開始整理山坡
+    size = 1;
+    for (int i = flag + 1; i <= n; i++) { // 計算 hill[] 需要開多大
+      if ((input[i - 1] * input[i]) < 0) {
+        size++;
+      }
+    }
+    int hill[size + 1]; // 多開一格，直接使用 1~n 方便思考
+    counter = 1;
+    j = 1;
+    for (int i = flag + 1; i <= n; i++) {  // 開始整理 hill
+      if ((input[i] * input[i - 1]) < 0) { // 上下坡轉換
+        if (input[i - 1] < 0) {
+          counter = -counter; // 下坡的話存負數，方便之後區分
+        }
+        hill[j] = counter;
+        counter = 1;
+        j++;
+        if (i == n) { // 結尾一定要存
+          if (input[i] < 0) {
+            counter = -counter; // 下坡的話存負數，方便之後區分
+          }
+          hill[j] = counter;
+        }
+      } else { // 一直上坡 or 一直下坡
+        counter++;
+        if (i == n) { // 結尾一定要存
+          if (input[i] < 0) {
+            counter = -counter; // 下坡的話存負數，方便之後區分
+          }
+          hill[j] = counter;
+        }
+      }
+    }
+
+    if (flag == n) { // 排頭就是結尾
+      hill[1] = input[n];
+    }
 
     if (debug_mode) {
       printf("flag = %d:\n", flag);
-      printf("\t目前的 counter = %d, x = %d, y = %d\n", counter, x, y);
-    }
-
-    for (int i = flag; i <= n; i++) {
-      if (debug_mode) {
-        printf("\ti = %d\n", i);
+      printf("\t計算出 size = %d, hill[] 開 size + 1 = %d 個位置\n", size,
+             size + 1);
+      printf("\thill[] 的內容：\n\t\t");
+      for (int i = 1; i <= size; i++) {
+        printf("%d, ", hill[i]);
       }
-      if (i == flag) {      // 此段第一個元素
-        if (hill[i] == 1) { // 上坡開頭
-          x = 1;
-          y = 0;
-          counter++;
-          if (debug_mode) {
-            printf("\t\t此為 flag = %d 的開頭，目前 x = %d, y = %d, counter = "
-                   "%d, mx = %d\n",
-                   flag, x, y, counter, mx);
-          }
-        } else { // 開頭不能是下坡
-          if (debug_mode) {
-            printf("\t\t因為練習路段不能由下坡開始，flag = %d 的路段 break;\n",
-                   flag);
-          }
-          break;
-        }
-      } else { // 第二個以後的元素
-        if (hill[i] == 1) {
-          if (hill[i - 1] == -1) {          // 剛剛是從下坡上來的
-            if (x - d <= y && y <= x + d) { // pre_x-d <= pre_y <= pre_x+d
-              x = 1;
-              y = 0;
-              counter++;
-              if (debug_mode) {
-                printf("\t\t因為 i = %d 是下坡，且當時 y "
-                       "還在範圍，所以現在可以繼續\n",
-                       i - 1);
-                printf("\t\t目前的 x:%d, y:%d, counter:%d, mx:%d\n", x, y,
-                       counter, mx);
-              }
-            } else { // 從前一個坡就得知現在應要下坡了，卻上坡
-              if (debug_mode) {
-                printf("\t\t從 i = %d 就知道 i = %d "
-                       "應該要下坡，現在卻在上坡，所以 break;\n",
-                       i - 1, i);
-                printf("\t\t目前的 x:%d, y:%d, counter:%d, mx:%d\n", x, y,
-                       counter, mx);
-              }
-              break;
-            }
-          } else {                          // 剛剛也是上坡，現在繼續
-            if (x - d <= y && y <= x + d) { // pre_x-d <= pre_y <= pre_x+d
-              x++;
-              counter++;
-              if (debug_mode) {
-                printf("\t\t因為 i = %d 是上坡，而且現在繼續，且 y "
-                       "在範圍內，所以通過\n",
-                       i - 1);
-                printf("\t\t目前的 x:%d, y:%d, counter:%d, mx:%d\n", x, y,
-                       counter, mx);
-              }
-            } else {
-              if (debug_mode) {
-                printf("\t\t從 i = %d 就知道 i = %d "
-                       "應該要下坡，現在卻在上坡，所以 break;\n",
-                       i - 1, i);
-                printf("\t\t目前的 x:%d, y:%d, counter:%d, mx:%d\n", x, y,
-                       counter, mx);
-              }
-              break; // 從前一個坡就得知現在應要下坡了，卻上坡
-            }
-          }
-        } else { // hill[i] == -1
-          y++;
-          counter++;
-          if (x - d <= y && y <= x + d) { // now_x-d <= now_y <= now_x+d
+      printf("\n");
+    }
+    // 整理完畢
+
+    // 開始檢驗 flag 當頭的最長路段
+    if (debug_mode) {
+      printf("\t開始檢驗 flag 開頭的路段有沒有符合\n");
+    }
+    counter = 0;
+    for (int i = 2; i <= size; i++) {
+      if (hill[1] > 0) {   // 開頭上坡
+        if (hill[i] < 0) { // 目前這個是上坡
+          x = hill[i - 1];
+          y = -hill[i]; // 取正
+          if (x - d <= y && y <= x + d) {
+            counter += (x + y);
             mx = MAX(mx, counter);
             if (debug_mode) {
-              printf("\t\t現在下坡，且 y 在範圍內，所以 mx 會進行存檔\n");
-              printf("\t\t目前的 x:%d, y:%d, counter:%d, mx:%d\n", x, y,
-                     counter, mx);
+              printf("\t目前 i = %d, x = %d, y = %d, counter = %d, mx = %d\n",
+                     i, x, y, counter, mx);
             }
-          } else if (y > (x + d)) {
+          } else { // 不合條件
             if (debug_mode) {
-              printf("\t\t因為已經下坡太多了，所以這段只能切到這裡，break;\n");
-              printf("\t\t目前的 x:%d, y:%d, counter:%d, mx:%d\n", x, y,
-                     counter, mx);
+              printf("\t不合條件，跳出！\n");
             }
             break;
-          } else { // y < x - d
-            if (debug_mode) {
-              printf("\t\t目前在下坡，但下坡量不夠，所以 counter++ 但 mx 先不記\n");
-              printf("\t\t目前的 x:%d, y:%d, counter:%d, mx:%d\n", x, y,
-                     counter, mx);
-            }
-            // continue
           }
+        } else { // 目前這個是下坡
+          // continue
         }
+
+      } else { // hill[1] < 0 下坡
+        if (debug_mode) {
+          printf("\t開頭不能是下坡，跳出！\n");
+        }
+
+        break; // 開頭不能是下坡
       }
     }
   }
-  if(debug_mode){
-    printf("**********公佈解答！！**********\n");
-    printf("mx = %d\n", mx);
+  if (debug_mode) {
+    printf("\n\n檢驗完畢，mx = %d\n", mx);
   } else {
     printf("%d", mx);
   }
