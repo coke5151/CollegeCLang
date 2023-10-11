@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 int main() {
-  int year, month, day;
-  scanf("%d/%d/%d", &day, &month, &year);
-  printf("%04d年%02d月%02d日", year, month, day);
-  return 0;
+    int year, month, day;
+    scanf("%d/%d/%d", &day, &month, &year);
+    printf("%04d年%02d月%02d日", year, month, day);
+    return 0;
 }

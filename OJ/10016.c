@@ -4,23 +4,23 @@
 #include <stdlib.h>
 
 int main() {
-  int n, x = 0;
-  scanf("%d", &n);
-  if (n <= 0) {
-    x = -100;
-  }
-  if (n > 0 && n % 3 == 0) {
-    x += 3;
-  }
-  if (n > 0 && n % 5 == 0) {
-    x += 5;
-  }
+    int n, x = 0;
+    scanf("%d", &n);
+    if (n <= 0) {
+        x = -100;
+    }
+    if (n > 0 && n % 3 == 0) {
+        x += 3;
+    }
+    if (n > 0 && n % 5 == 0) {
+        x += 5;
+    }
 
-  if (100 <= n && n <= 200) {
-    x += 50;
-  } else if (n > 0) {
-    x -= 50;
-  }
-  printf("%d", x);
-  return 0;
+    if (100 <= n && n <= 200) {
+        x += 50;
+    } else if (n > 0) {
+        x -= 50;
+    }
+    printf("%d", x);
+    return 0;
 }

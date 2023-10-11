@@ -4,10 +4,10 @@
 #include <stdlib.h>
 
 int main() {
-  char input[5];
-  scanf("%s", input);
-  for (int i = 0; i < 5; i++) {
-    printf("%c", input[i] ^ '&');
-  }
-  return 0;
+    char input[5];
+    scanf("%s", input);
+    for (int i = 0; i < 5; i++) {
+        printf("%c", input[i] ^ '&');
+    }
+    return 0;
 }

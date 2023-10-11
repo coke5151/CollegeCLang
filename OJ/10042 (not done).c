@@ -4,15 +4,15 @@
 #include <stdlib.h>
 
 void swap(int *a, int *b) {
-  int temp;
-  temp = *a;
-  *a = *b;
-  *b = temp;
+    int temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 int main() {
-  int n;
-  scanf("0x%x", &n);
+    int n;
+    scanf("0x%x", &n);
 
-  return 0;
+    return 0;
 }
