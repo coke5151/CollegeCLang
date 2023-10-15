@@ -1,3 +1,5 @@
+// 此為學長寫的 Code，嚴禁照抄
+
 #include <stdio.h>
 #include <string.h>
 int main() {
