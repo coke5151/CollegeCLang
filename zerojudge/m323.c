@@ -6,32 +6,38 @@
 #define MAX(i, j) (i > j ? i : j)
 
 int main() {
-    int n;
-    scanf("%d", &n);
-    int prices[n];
-    for (int i = 0; i < n; i++) {
-        scanf("%d", &prices[i]);
+    long long n;
+    long long sum = 0;
+    long long last_low_price = 0;
+
+    scanf("%lld", &n);
+    long long price[n];
+    for (long long i = 0; i < n; i++) {
+        scanf("%lld", &price[i]);
     }
 
-    int mx = 0, counter = 0;
-    int buyprice;
     bool holding = false;
+    last_low_price = price[0];
+    for (long long i = 1; i < n; i++) {
+        if (price[i] < price[i - 1]) {
+            if (holding) {
+                sum += (price[i - 1] - last_low_price);
+                holding = false;
+            }
+            last_low_price = price[i];
+        } else {
+            holding = true;
+        }
 
-    for (int head = 0; head <= n - 1; head++) {
-        counter = 0;
-        for (int i = head; i <= head; i++) {
-            if (!holding) {
-                buyprice = prices[i];
-                holding = true;
+        if (i == (n - 1) && price[i] > price[i - 1]) { // 到了最後
+            if (holding) {
+                sum += (price[i] - last_low_price);
             } else {
-                if (prices[i] > buyprice) {
-                    counter += (prices[i] - buyprice);
-                    mx = MAX(mx, counter);
-                    holding = false;
-                }
+                sum += (price[i] - price[i - 1]);
             }
         }
     }
-    printf("%d", mx * 1000);
+    printf("%lld", sum * 1000);
+
     return 0;
 }

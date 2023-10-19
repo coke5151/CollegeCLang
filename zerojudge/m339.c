@@ -3,6 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int sum_of_all_digits(int n) {
+    int sum = 0;
+    while (n != 0) {
+        sum += (n % 10);
+        n /= 10;
+    }
+    return sum;
+}
+
 bool isPrime(int n) {
     bool prime = true;
     for (int i = n - 1; i >= 2; i--) {
@@ -28,7 +37,7 @@ int main() {
     } else {
         bk = 1;
     }
-    if (bk == 0 && isPrime(m + n)) {
+    if (bk == 0 && isPrime(sum_of_all_digits(m) + sum_of_all_digits(n))) {
         printf("YES");
     } else {
         printf("NO");

@@ -26,7 +26,7 @@ int main() {
     result.imaginary = ((a.imaginary * b.real) - (a.real * b.imaginary));
     under = pow(b.real, 2) + pow(b.imaginary, 2);
 
-    max_gcd = gcd(gcd(result.real, result.imaginary), under);
+    max_gcd = abs(gcd(gcd(result.real, result.imaginary), under));
 
     result.real /= max_gcd;
     result.imaginary /= max_gcd;
