@@ -47,11 +47,12 @@ void dfs(int layer) {
     for (int i = 0; i < 2; i++) {
         if (current_count[i] == 0) { // 如果沒有剩下了
             continue;
+        } else {
+            current_count[i]--; // 用掉一顆
+            arrangement[layer] = i;
+            dfs(layer + 1); // 下一層 DFS
+            current_count[i]++;
         }
-        current_count[i]--; // 用掉一顆
-        arrangement[layer] = i;
-        dfs(layer + 1); // 下一層 DFS
-        current_count[i]++;
     }
 }
 
