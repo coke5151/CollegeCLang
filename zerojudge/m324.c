@@ -37,8 +37,8 @@ int main() {
         for (int i = 0; i < n; i++) {
             printf("%d", arr[i]);
         }
-    } else {            // 奇數個 1
-        if (one < 11) { // 不到 11 個，奇數個 1 絕對湊不出來
+    } else {                         // 奇數個 1
+        if (one < 11 || zero < 10) { // 1 不到 11 個或 0 不到 10 個
             printf("-1");
         } else {
             while (one > 11) {
