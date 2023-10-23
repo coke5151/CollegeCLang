@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 int main(){
-    printf("Hello World");
+    printf("%.2d", 8);
+    printf("%02d", 8);
     return 0;
 }
