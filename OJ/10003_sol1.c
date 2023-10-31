@@ -1,4 +1,5 @@
 // 欸這東西有沒有過期阿（不良解法）
+// 看不懂正常，直接看 sol2 就好
 
 #include <stdio.h>
 #include <string.h>
