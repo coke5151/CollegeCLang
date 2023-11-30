@@ -20,34 +20,30 @@ int main() {
     }
     // 答案歸零
     for (int i = 0; i < n1; i++) {
-        for (int j = 0; j < m2; i++) {
+        for (int j = 0; j < m2; j++) {
             ans[i][j] = 0;
         }
     }
     // 乘法
     int mx1_m = 0;
     int mx2_n = 0;
-    for (int i = 0; i < n1; i++) {
-        for (int j = 0; j < m2; j++) {
+    for (int i = 0; i < n1; i++) {     // 0, 1
+        for (int j = 0; j < m2; j++) { // 0, 1
             while (mx1_m < m1 && mx2_n < n2) {
-                ans[i][j] += mx1[i][mx1_m] * mx2[j][mx2_n];
+                ans[i][j] += (mx1[i][mx1_m] * mx2[mx2_n][j]);
                 mx1_m++;
                 mx2_n++;
             }
+            mx1_m = 0;
+            mx2_n = 0;
         }
     }
     // 輸出
-    int first_print = 1;
     for (int i = 0; i < n1; i++) {
-        first_print = 1;
         for (int j = 0; j < m2; j++) {
-            if (first_print) {
-                printf("%d", ans[i][j]);
-                first_print = 0;
-            } else {
-                printf(" %d", ans[i][j]);
-            }
+            printf("%d ", ans[i][j]);
         }
+        printf("\n");
     }
     return 0;
 }

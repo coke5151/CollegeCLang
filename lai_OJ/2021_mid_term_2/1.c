@@ -2,8 +2,32 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX(i, j) (i > j ? i : j)
+
+bool isAnagram(char s[], int voc1_left, int voc1_right, int voc2_left,
+               int voc2_right) {
+    if ((voc2_right - voc2_left + 1) != (voc1_right - voc1_left + 1)) {
+        return false; // 長度不同不可能 Anagram
+    }
+    int voc1[26] = {0};
+    int voc2[26] = {0};
+    for (int i = voc1_left; i <= voc1_right; i++) {
+        voc1[s[i] - 'a']++;
+    }
+    for (int i = voc2_left; i <= voc2_right; i++) {
+        voc2[s[i] - 'a']++;
+    }
+    bool is_anagram = true;
+    for (int i = 0; i < 26; i++) {
+        if (voc1[i] != voc2[i]) {
+            is_anagram = false;
+            break;
+        }
+    }
+    return is_anagram;
+}
 
 bool isPali(char s[], int voc_left, int voc_right) {
     bool ispalidrome = true;
@@ -17,84 +41,63 @@ bool isPali(char s[], int voc_left, int voc_right) {
 }
 
 int main() {
-    char s[1000];
+    char s[100000];
     int check_ana_num = 0;
     int longest = 0;
     scanf("%[^\n]", s);
     int i = 0;
-    int counter = 0;
-    int voc_left_i = 0;
-    int voc_right_i = 0;
-    int check[1000][26] = {0}; // 每個單字使用的字母有哪些
-    bool anagram = false;      // 此次輸出是否有 anagram
+    int voc_left_i = -1;
+    int voc_right_i = -1;
+    int voc_i[100000] = {0};
+    int voc_i_saver = 0;
     // 記錄最大值
-    while (s[i] != '?' && s[i] != '.' && s[i] != '!') {
-        if (i == 0) {
-            counter++;
+    while (s[i] != '\0') {
+        if (voc_left_i == -1) { // 左界還沒找到
+            if (s[i] != ' ') {
+                voc_left_i = i;
+                voc_i[voc_i_saver] = i;
+                voc_i_saver++;
+            }
         } else {
-            if (s[i] == ' ' && s[i - 1] != ' ') { // 一個單字結束
-                longest = MAX(longest, counter);  // 記錄最長的單字多長
-                counter = 0;
-            } else if (s[i] != ' ' && s[i - 1] == ' ') {
-                counter++;
-            } else if (s[i] != ' ' && s[i - 1] != ' ') {
-                counter++;
+            if ((s[i] == ' ' && s[i - 1] != ' ') ||
+                (i == strlen(s) - 1)) { // 一個單字結束
+                voc_right_i = i - 1;
+                voc_i[voc_i_saver] = i - 1;
+                voc_i_saver++;
+                longest =
+                    MAX(longest,
+                        (voc_right_i - voc_left_i + 1)); // 記錄最長的單字多長
+            } else if (s[i] != ' ' && s[i - 1] == ' ') { // 一個單字開始
+                voc_left_i = i;
+                voc_i[voc_i_saver] = i;
+                voc_i_saver++;
             }
         }
         i++;
     }
     printf("%d\n", longest);
-    // 處理其它
-    i = 0;
-    bool left_prepared = false;
-    while (s[i] != '?' && s[i] != '.' && s[i] != '!') {
-        if (left_prepared) {
-            if (i > 0) {
-                if (s[i] == ' ' && s[i - 1] != ' ') { // 一個單字結束
-                    check_ana_num++; // 記錄要檢查的總數量
-                    voc_right_i = i - 1;
-                    if (isPali(s, voc_left_i, voc_right_i)) { // 如果是迴文
-                        for (int i = voc_left_i; i <= voc_right_i; i++) {
-                            printf("%c", s[i]); // 印出單字
-                        }
-                        printf(" ");
-                    }
-                    for (int i = voc_left_i; i <= voc_right_i; i++) {
-                        check[check_ana_num][s[i] - 'a']++;
-                        check_ana_num++;
-                    }
-
-                } else if (s[i] != ' ' && s[i - 1] == ' ') {
-                    voc_left_i = i;
-                }
+    // 判斷迴文
+    bool has_pali = false;
+    for (int i = 0; i < voc_i_saver - 1; i += 2) {
+        if (isPali(s, voc_i[i], voc_i[i + 1])) {
+            has_pali = true;
+            for (int j = voc_i[i]; j <= voc_i[i + 1]; j++) {
+                printf("%c", s[j]);
             }
-        } else {
-            if (s[i] != ' ') {
-                left_prepared = true;
-                voc_left_i = i;
-            }
+            printf(" ");
         }
-        i++;
     }
-    bool same_one;
-    bool same_whole;
-    for (int i = 0; i < check_ana_num; i++) {
-        same_whole = false;
-        for (int j = i + 1; j < check_ana_num; j++) {
-            same_one = true;
-            for (int k = 0; k < 26; k++) {
-                if (check[i][k] != check[j][k]) {
-                    same_one = false;
-                    break;
-                }
-            }
-            if (same_one) {
-                same_whole = true;
+    if (!has_pali) {
+        printf("-1");
+    }
+    // 判斷 Anagram
+    bool anagram = false;
+    for (int i = 0; i < voc_i_saver - 1; i += 2) {
+        for (int j = i + 2; j < voc_i_saver - 1; j += 2) {
+            if (isAnagram(s, voc_i[i], voc_i[i + 1], voc_i[j], voc_i[j + 1])){
+                anagram = true;
                 break;
             }
-        }
-        if (same_whole) {
-            anagram = true;
         }
     }
     printf("\n");
