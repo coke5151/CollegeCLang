@@ -8,11 +8,11 @@ int main() {
     int sum = 0;
     fgets(s, 1000, stdin);
     fgets(ss, 1000, stdin);
-    s[strcspn(s, "\n")] = '\0';
-    ss[strcspn(ss, "\n")] = '\0';
+    *(s + strcspn(s, "\n")) = '\0';
+    *(ss + strcspn(ss, "\n")) = '\0';
 
     for (int i = 0; i < strlen(s) && i < strlen(ss); i++) {
-        if (s[i] == ss[i]) {
+        if (*(s + i) == *(ss + i)) {
             sum++;
         }
     }

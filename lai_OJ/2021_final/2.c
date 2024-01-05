@@ -11,13 +11,11 @@ int main() {
     char temp[100];
     while (n--) {
         fgets(temp, sizeof(temp), stdin);
-        temp[strcspn(temp, "\n")] = '\0'; // 刪除 fgets 產生的換行符號
-
+        *(temp + strcspn(temp, "\n")) = '\0'; // 刪除 fgets 產生的換行符號
         int lng = strlen(temp);
-        if (lng >= 2 && temp[lng - 1] == 'c' && temp[lng - 2] == '.') {
+        if (lng >= 2 && *(temp + lng - 1) == 'c' && *(temp + lng - 2) == '.') {
             printf("%s\n", temp);
         }
     }
-
     return 0;
 }

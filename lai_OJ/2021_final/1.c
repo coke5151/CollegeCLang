@@ -5,7 +5,10 @@
 
 int main() {
     char s[1000], ss[1000];
-    scanf("%[^\n]\n%[^\n]", s, ss);
+    fgets(s, sizeof(s), stdin);
+    fgets(ss, sizeof(ss), stdin);
+    *(s + strcspn(s, "\n")) = '\0';
+    *(ss + strcspn(ss, "\n")) = '\0';
     if (strcmp(s, ss) == 0) {
         printf("same");
     } else {
